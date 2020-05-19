@@ -1,0 +1,98 @@
+package as2;
+class even extends Thread
+{
+int limit;
+printer p;
+public even(int limit, printer p)
+{
+this.limit = limit;
+this.p = p;
+}
+@override
+public void run()
+{
+int evenNumber = 2;
+while (evenNumber <= limit)
+{
+p.printEven(evenNumber);
+evenNumber = evenNumber + 2;
+}
+}
+}
+package as2;
+public class main
+{
+public static void main(String[] args)
+{
+printer p = new printer();
+
+    odd o = new odd(20,p);
+     
+    o.setName("pong");
+     
+    even e = new even(20,p);
+     
+    e.setName("ping");
+     
+    o.start();
+     
+    e.start();
+}
+}
+package as2;
+class odd extends Thread
+{
+int limit;
+printer p;
+public odd(int limit, printer p)
+{
+this.limit = limit;
+this.p = p;
+}
+@override
+public void run()
+{
+int oddNumber = 1;
+while (oddNumber <= limit)
+{
+p.printOdd(oddNumber);
+oddNumber = oddNumber + 2;
+}
+}
+}
+package as1;
+class printer
+{
+
+boolean isOddPrinted = false;
+ 
+
+synchronized void printOdd(int number)
+{
+    while (isOddPrinted)
+    {
+        try
+        {
+            wait();
+        } 
+        catch (InterruptedException e)
+        {
+            e.printStackTrace();
+        }
+    }
+     
+    System.out.println(Thread.currentThread().getName()+" : "+number);
+     
+    isOddPrinted = true;
+     
+    try
+    {
+        Thread.sleep(1000);
+    } 
+    catch (InterruptedException e) 
+    {
+        e.printStackTrace();
+    }
+     
+    notify();
+}
